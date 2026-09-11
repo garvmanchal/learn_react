@@ -1,10 +1,10 @@
-import { useRef } from "react";
+import { useRef } from "react"
 
 function Searchbox(){
     const inputRef = useRef<HTMLInputElement>(null);
 
     function focusInput(){
-        inputRef.current?.focus();
+        inputRef.current?.focus()
     }
 
     return (
@@ -12,7 +12,7 @@ function Searchbox(){
         <input ref = {inputRef} />
         <button onClick={focusInput}>Focus</button>
         </>
-    );
+    )
 }
 
-export default Searchbox ;
+export default Searchbox 

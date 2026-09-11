@@ -1,16 +1,16 @@
 
 
 const Greet = () => {
-    const name = "Garv" ;
+    const name = "Garv" 
   return (
     <div>Hello,{name}</div>
-  );
-};
+  )
+}
 
 type UsercardProps= {
   name : string,
-  role : string
-};
+  role : string,
+}
 
 const Usercard = ({name, role}: UsercardProps) => {
   return (
@@ -18,7 +18,7 @@ const Usercard = ({name, role}: UsercardProps) => {
        <h1>{name} </h1>
        <p>{role} </p>
        </div>
-  );
-};
+  )
+}
 
-export {Greet , Usercard};
+export {Greet , Usercard}

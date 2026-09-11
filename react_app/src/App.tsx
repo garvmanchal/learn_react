@@ -5,8 +5,8 @@
 import {Greet, Usercard } from "./components/demo"
 import Counter from "./components/count"
 import Clock from  "./components/clock"
-import Searchbox from "./components/searchbox";
-import Cpp from "./components/themecontext";
+import Searchbox from "./components/searchbox"
+import Cpp from "./components/themecontext"
 
 
 const App = () => {
@@ -19,9 +19,9 @@ const App = () => {
       <Searchbox/>
       <Cpp/>
     </div>
-  );
-};
+  )
+}
 
-export default App ;
+export default App 
 
 
