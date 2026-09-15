@@ -1,68 +1,3 @@
-// import { useState, useEffect} from "react"
-// import Card from '../components/Card'
-
-// function Home(){
-//     const [count , setCount] = useState(0)
-//     const [bookings , setBookings] = useState([]) 
-//     const [loading , setLoading] = useState(true) 
-
-
-//  useEffect(() => {
-//   fetch("http://127.0.0.1:8000/chat", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       message: "Hello",
-//     }),
-//   })
-//     .then((res) => res.json())
-//     .then((data) => {
-//       console.log(data)
-//     })
-// }, [])
-
-
-   
-//     return (
-//         <>
-//         <h1>Vite + React </h1>
-
-//         {/* <ul>
-//             {bookings.map((b) => (
-//             <li key={b.id}>{b.customerName}</li>
-//         ))}
-//             </ul>
-//             );
-//         } */}
-
-
-
-
-//         <div className = "card">
-//             <button onClick= {() =>  setCount((c)=> c + 1)}>
-//                 count is {count}
-//             </button>
-//             <p> 
-//                 Edit <code>src/pages/Home.tsx</code> save to test HMR
-//             </p>
-//         </div> 
-
-//         <div className = "card-grid">
-//             <Card title = "Fast" description= "Vite's dev server starts almost instantly."/>
-//             <Card title = "Modern" description = "Built on React 19 with the latest features."/>
-//             <Card title = "Typed" description ="Typescript catches mistakes before you run the app."/>
-            
-//         </div>
-//         </>
-//     )
-// } 
-
-
-
-// export default Home
-
 import { useState } from "react"
 
 interface ChatMessage {
@@ -87,7 +22,11 @@ export default function Chat() {
   const sendMessage = async () => {
     if (!input.trim()) return
 
-    const userMessage: ChatMessage = { role: "user", text: input }
+    const userMessage: ChatMessage = {
+      role: "user",
+      text: input,
+    }
+
     setMessages((prev) => [...prev, userMessage])
     setInput("")
     setLoading(true)
@@ -98,7 +37,9 @@ export default function Chat() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({
+          message: input,
+        }),
       })
 
       if (!res.ok) {
@@ -107,13 +48,21 @@ export default function Chat() {
 
       const data: ChatResponse = await res.json()
 
-      const botMessage: ChatMessage = { role: "bot", text: data.answer }
+      const botMessage: ChatMessage = {
+        role: "bot",
+        text: data.answer,
+      }
+
       setMessages((prev) => [...prev, botMessage])
     } catch (err) {
       console.error("Chat error:", err)
+
       setMessages((prev) => [
         ...prev,
-        { role: "bot", text: "Sorry, something went wrong." },
+        {
+          role: "bot",
+          text: "Sorry, something went wrong.",
+        },
       ])
     } finally {
       setLoading(false)
@@ -134,88 +83,208 @@ export default function Chat() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#000000",
-        fontFamily: "sans-serif",
+        backgroundColor: "#d9dbd5",
+        fontFamily: "Arial, sans-serif",
       }}
     >
+      {/* Main Chat Container */}
       <div
         style={{
           width: 500,
-          maxWidth: "90%",
-          backgroundColor: "#720404",
-          borderRadius: 12,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-          padding: 20,
+          maxWidth: "95%",
+          height: "90vh",
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#efeae2",
+          borderRadius: 10,
+          overflow: "hidden",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
         }}
       >
-        <h2 style={{ textAlign: "center", marginTop: 0 }}>Chatbot</h2>
-
+        {/* Header */}
         <div
           style={{
-            border: "1px solid #063d17",
-            borderRadius: 8,
-            padding: 12,
-            height: 400,
+            backgroundColor: "#075e54",
+            color: "#ffffff",
+            padding: "14px 24px",
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+          }}
+        >
+          {/* Bot Avatar */}
+          <div
+            style={{
+              width: 58,
+              height: 58,
+              borderRadius: "50%",
+              backgroundColor: "#25d366",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 30,
+              flexShrink: 0,
+            }}
+          >
+            🤖
+          </div>
+
+          {/* Bot Name */}
+          <div>
+            <div
+              style={{
+                fontSize: 23,
+                fontWeight: "bold",
+              }}
+            >
+              Chatbot
+            </div>
+
+            <div
+              style={{
+                fontSize: 15,
+                marginTop: 5,
+                opacity: 0.9,
+              }}
+            >
+              {loading ? "typing..." : "online"}
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Area */}
+        <div
+          style={{
+            flex: 1,
+            padding: 16,
             overflowY: "auto",
             display: "flex",
             flexDirection: "column",
             gap: 8,
+            backgroundColor: "#efeae2",
           }}
         >
+          {/* Empty Chat Message */}
           {messages.length === 0 && (
-            <div style={{ color: "#999", textAlign: "center", marginTop: 150 }}>
+            <div
+              style={{
+                color: "#54656f",
+                textAlign: "center",
+                marginTop: 220,
+                fontSize: 16,
+              }}
+            >
+              🔒 Messages are end-to-end encrypted
+              <br />
+              <br />
               Start the conversation...
             </div>
           )}
+
+          {/* Messages */}
           {messages.map((msg, i) => (
             <div
               key={i}
               style={{
-                alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-                backgroundColor: msg.role === "user" ? "#007bff" : "#e5e5ea",
-                color: msg.role === "user" ? "#fff" : "#000",
-                padding: "8px 12px",
-                borderRadius: 16,
+                alignSelf:
+                  msg.role === "user" ? "flex-end" : "flex-start",
+
+                backgroundColor:
+                  msg.role === "user" ? "#d9fdd3" : "#ffffff",
+
+                color: "#111b21",
+
+                padding: "9px 13px",
+
+                borderRadius:
+                  msg.role === "user"
+                    ? "8px 0px 8px 8px"
+                    : "0px 8px 8px 8px",
+
                 maxWidth: "75%",
+
+                fontSize: 14,
+
+                lineHeight: 1.5,
+
+                boxShadow: "0 1px 1px rgba(0, 0, 0, 0.1)",
+
+                wordBreak: "break-word",
               }}
             >
               {msg.text}
             </div>
           ))}
+
+          {/* Typing Indicator */}
           {loading && (
-            <div style={{ alignSelf: "flex-start", color: "#888" }}>
-              Typing...
+            <div
+              style={{
+                alignSelf: "flex-start",
+                backgroundColor: "#ffffff",
+                color: "#667781",
+                padding: "9px 13px",
+                borderRadius: "0px 8px 8px 8px",
+                fontSize: 14,
+                boxShadow: "0 1px 1px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              typing...
             </div>
           )}
         </div>
 
-        <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+        {/* Input Area */}
+        <div
+          style={{
+            backgroundColor: "#f0f2f5",
+            padding: "12px 14px",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+          }}
+        >
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type a message..."
+            placeholder="Type a message"
             style={{
               flex: 1,
-              padding: 8,
-              borderRadius: 6,
-              border: "1px solid #ccc",
+              padding: "13px 18px",
+              borderRadius: 24,
+              border: "none",
+              outline: "none",
+              fontSize: 15,
+
+              // Important: makes typed text visible
+              color: "#111b21",
+
+              backgroundColor: "#ffffff",
             }}
           />
+
+          {/* Send Button */}
           <button
             onClick={sendMessage}
             disabled={loading}
             style={{
-              padding: "8px 16px",
-              borderRadius: 6,
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
               border: "none",
-              backgroundColor: "#007bff",
-              color: "#fff",
-              cursor: "pointer",
+              backgroundColor: loading ? "#8696a0" : "#25d366",
+              color: "#ffffff",
+              cursor: loading ? "not-allowed" : "pointer",
+              fontSize: 21,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
             }}
           >
-            Send
+            ➤
           </button>
         </div>
       </div>
